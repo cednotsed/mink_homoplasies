@@ -1,6 +1,6 @@
 rm(list = ls())
-setwd("~/git_repos/covid_homoplasy_2")
-df <- read.csv("gisaid_cov2020_sequences.30.07.2020.QC.human.nextstrain_filter.QC.deMaiomask.HPfinder.noambig.BASECOUNTS.csv", 
+setwd("~/git_repos/mink_homoplasies/")
+df <- read.csv("data/Combined_05_11_2020.deMaio.BASECOUNTS.csv", 
                stringsAsFactors = F,
                check.names = F)
 colnames(df)[1] <- "ref"
@@ -44,7 +44,7 @@ plt1 <- ggplot(plot_df, aes(x = L1, y = value, fill = L1)) +
         legend.position = "None") +
   scale_fill_discrete()
 
-# ggsave("snp_counts/all_SNPs_by_pos.png", dpi = 600)
+ggsave("snp_counts/all_SNPs_by_pos.png", dpi = 300, height = 5, width = 5)
 
 ###########################################################################
 # Homoplasy positions
@@ -85,5 +85,5 @@ annotate_figure(figure,
                 bottom = text_grob("Mutation Type"),
                 left = text_grob("Proportion", rot = 90)
                 )
-ggsave("snp_counts/snps_by_pos.png", dpi = 600, width = 8, height = 4)
+ggsave("snp_counts/snps_by_pos_minks.png", dpi = 300, width = 8, height = 4)
 
