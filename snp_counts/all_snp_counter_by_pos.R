@@ -1,6 +1,7 @@
 rm(list = ls())
-setwd("~/git_repos/mink_homoplasies/")
-df <- read.csv("data/Combined_05_11_2020.deMaio.BASECOUNTS.csv", 
+setwd("~/git_repos/mink_homoplasies")
+require(tidyverse); require(ggplot2); require(data.table); require(reshape2)
+df <- read.csv("data/Combined_05_11_2020.deMaio.BASECOUNTS.parsed.csv", 
                stringsAsFactors = F,
                check.names = F)
 colnames(df)[1] <- "ref"
@@ -22,28 +23,37 @@ for (ref in c("A", "C", "U", "G")) {
   }
 }
 
-require(reshape2)
-plot_df <- melt(mut_list)
+plot_df <- reshape2::melt(mut_list)
 plot_df$L1 <- as.character(plot_df$L1)
 plot_df$L1 <- factor(plot_df$L1, levels = plot_df$L1[order(plot_df$value, decreasing = T)])
 
 # Perform computations
 Cs <- plot_df[grep("C->", plot_df$L1), ]
 sum(Cs$value)
-Cs$value[Cs$L1 == "C->U"]/sum(Cs$value)
+cu_c <- Cs$value[Cs$L1 == "C->U"]/sum(Cs$value)
 
-# Proportions
+# # Save results
+# result_df <- fread("dnds/dnds_results.csv")
+# result_df <- rbind(result_df, data.frame(description = c("C->U/C->?"), statistic = c(cu_c)))
+# fwrite(result_df, "dnds/dnds_results.csv")
+
+# Convert to proportions
 plot_df$value <- plot_df$value / sum(plot_df$value)
 
-require(ggplot2)
+# Make symmetric mutations have same fill
+print(levels(plot_df$L1))
+fills <- c("tomato", "steelblue", "steelblue", "darkseagreen", 
+           "tomato", "grey", "orange", "darkseagreen", 
+           "orange", "firebrick", "grey", "firebrick")
+# Plot
 plt1 <- ggplot(plot_df, aes(x = L1, y = value, fill = L1)) +
   geom_bar(stat = "identity") +
   geom_text(aes(label = round(value, 2)), position = position_dodge(width=0.9), vjust=0, size = 3) +
-  labs(x = "", y = "") +
+  labs(x = "Mutation Type", y = "Proportion") +
   theme(axis.text.x = element_text(angle = 30),
         legend.position = "None") +
-  scale_fill_discrete()
-
+  scale_fill_manual(values = fills)
+plt1
 ggsave("snp_counts/all_SNPs_by_pos.png", dpi = 300, height = 5, width = 5)
 
 ###########################################################################
