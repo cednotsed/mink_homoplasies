@@ -1,6 +1,6 @@
 rm(list = ls())
 setwd("~/git_repos/mink_homoplasies")
-require(tidyverse); require(data.table); require(ggplot2); require(Biostrings); require(see)
+require(tidyverse); require(data.table); require(ggplot2); require(Biostrings); require(see); require(ggpubr)
 # fasta <- read.fasta(file = "CpG/gisaid_hcov-2020_08_25.QC.NSoutlier.filter.deMaiomask.EPIID.aln")
 # fasta.subset <- fasta[1:10]
 # write.fasta(fasta.subset, names(fasta.subset), file.out = "CpG/human_subset.fasta")
@@ -38,8 +38,10 @@ plt <- ggplot(plot_df, aes(x = host, y = cg_freq, fill = host)) +
                     alpha = 1) +
        labs(y = "CpG Frequency", x = "Host") +
        coord_flip() +
-       theme(legend.position = "none") +
+       theme(legend.position = "none",
+             plot.margin=unit(c(0.5, 0.5, 0.5, 0.5), "cm")) +
        stat_compare_means(method = "wilcox.test", 
                           label.x = 0.5, label.y = 363)
 
+plt
 ggsave("CpG/CpG_frequencies.png", plot = plt, dpi = 300, width = 8, height = 5)

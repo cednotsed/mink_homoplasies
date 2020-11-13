@@ -29,7 +29,7 @@ description <- c(description, "NS/S")
 statistic <- c(statistic, ns_s)
 
 # NS/(S + NS)
-ns_s_ns <- sum(ns) / (sum(syn) + sum(ns))
+ns_s_ns <- non_syn / (syn + non_syn)
 description <- c(description, "NS/(S + NS)")
 statistic <- c(statistic, ns_s_ns)
 
@@ -44,6 +44,13 @@ CU <- df[df$ref == 'C' & df$snp == 'T', ]
 ns_cu_cu <- sum(CU[CU$NS_S == "NS", "snp_count"]) / sum(CU$snp_count)
 description <- c(description, "(NS and C->U) / C->U")
 statistic <- c(statistic, ns_cu_cu)
+
+# NS and C->U / NS and C->?
+CU <- df[df$ref == 'C' & df$snp == 'T', ]
+CX <- df[df$ref == 'C', ]
+ns_cu_cx <- sum(CU[CU$NS_S == "NS", "snp_count"]) / sum(CX[CX$NS_S == "NS", "snp_count"])
+description <- c(description, "NS and C->U / NS and C->?")
+statistic <- c(statistic, ns_cu_cx)
 
 # all <- read.csv("filtered-homoplasic-sites-table_alt2_vs_alt1_0.2.csv", check.names = F, stringsAsFactors = F)
 # all <- all[, c("bp", "N.isolates.with.homoplasy")]

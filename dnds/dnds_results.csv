@@ -5,6 +5,7 @@ No. of synonymous mutations,1033
 No. of non-synonymous mutations,1905
 NS/S,1.844143272
 NS/(S + NS),0.648400272
-(NS and C->U) / NS,0.367454068
+(NS and C->U) / NS ,0.367454068
 (NS and C->U) / C->U,0.569568755
+NS and C->U / NS and C->?,0.872817955
 C->U/C->?,0.915789474
